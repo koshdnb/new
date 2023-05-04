@@ -98,7 +98,7 @@ export const getChartOptions = (successValue) => {
             return `${value} %`
           },
           color: function (context) {
-            if (context.tick.value === 4.5) {
+            if (context.tick.value === successValue) {
               return 'rgba(255, 212, 34, 1)'
             }
             return 'white'
@@ -108,7 +108,7 @@ export const getChartOptions = (successValue) => {
               return null
             }
 
-            if (context.tick.value === 4.5) {
+            if (context.tick.value === successValue) {
               return {
                 size: 14,
               }

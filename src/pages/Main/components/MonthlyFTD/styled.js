@@ -11,9 +11,8 @@ export const StatsBlock = styled(WeekAverage)`
 `;
 
 export const ChartWrapper = styled.div`
-  margin-left: 180px;
   width: 600px;
-  height: 240px;
+  height: 300px;
 `
 
 export const StatsWrapper = styled.div`
@@ -22,4 +21,5 @@ export const StatsWrapper = styled.div`
 
 export const MonthChartBlock = styled(ChartBlock)`
   flex-direction: row;
+  justify-content: space-between;
 `

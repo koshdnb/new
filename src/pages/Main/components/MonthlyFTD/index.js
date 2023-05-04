@@ -28,7 +28,7 @@ const MontlyFTD = () => {
         </StatsWrapper>
         <ChartWrapper>
           <BarChart
-            values={[39657, 41000, 31000]}
+            values={[29500, 41000, 31000]}
             labels={['APR', 'MAY', 'JUN']}
             successValue={36200}
           />
