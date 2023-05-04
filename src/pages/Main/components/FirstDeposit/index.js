@@ -6,9 +6,18 @@ import WeeklyGoal from '../../../../shared/ui/WeeklyGoal';
 import WeekAverage from '../../../../shared/ui/WeekAverage';
 
 import { Wrapper, ChartWrapper, AverageWrapper, WeekAverageWrapper } from './styled';
+import {useSelector} from "react-redux";
+import {selectData} from "../../../../store/dataSlice";
+import {selectBrand, selectSource} from "../../../../store/headerSlice";
 
 const FirstDeposit = () => {
-  return (
+    const brand = useSelector(selectBrand);
+    const source = useSelector(selectSource);
+    const data = useSelector(selectData(brand, source));
+    const {firstDeposit} = data;
+    console.log(data);
+
+    return (
     <Wrapper>
       <SectionHeader
         title="CR to FTD"
@@ -32,7 +41,7 @@ const FirstDeposit = () => {
           </WeekAverageWrapper>
         </AverageWrapper>
         <BarChart
-          values={[4.3, 3.8, 5.4, 4.1, 4, 5.1, 4.7, 4.3, 4.2, 4]}
+          values={firstDeposit}
           labels={['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10']}
           successValue={4.5}
         />
