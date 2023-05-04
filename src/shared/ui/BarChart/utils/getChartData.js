@@ -3,9 +3,8 @@ import {
   NEGATIVE_BAR_COLORS,
   SUCCESS_BAR_COLORS,
 } from '../../../configs/chartColors'
-import { SUCCESS_VALUE } from '../../../configs/chartSuccessValue'
 
-export const getChartData = (data, labels) => {
+export const getChartData = (data, labels, successValue) => {
   const maxValue = Math.ceil(Math.max(...data))
 
   return {
@@ -23,7 +22,7 @@ export const getChartData = (data, labels) => {
           }
 
           const colors =
-            context.raw > SUCCESS_VALUE
+            context.raw > successValue
               ? SUCCESS_BAR_COLORS
               : NEGATIVE_BAR_COLORS
 

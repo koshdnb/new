@@ -30,9 +30,9 @@ ChartJS.register(
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.font.family = 'Inter'
 
-const BarChart = ({ values, labels }) => {
-  const data = getChartData(values, labels)
-  const options = getChartOptions()
+const BarChart = ({ values, labels, successValue }) => {
+  const data = getChartData(values, labels, successValue)
+  const options = getChartOptions(successValue)
   const plugins = [chartDataLabels, addBarPictures, customBackground]
 
   return <Bar options={options} data={data} plugins={plugins} />

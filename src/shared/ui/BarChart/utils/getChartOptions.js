@@ -3,25 +3,27 @@ import {
   ANNOTATION_BORDER_COLOR,
   LABEL_BACKGROUND_COLOR,
 } from '../../../configs/chartColors'
-import { SUCCESS_VALUE } from '../../../configs/chartSuccessValue'
 
-export const getChartOptions = () => {
+export const getChartOptions = (successValue) => {
   return {
+    layout: {
+      padding: 50
+    },
     plugins: {
       annotation: {
         annotations: {
           horizontalLine1: {
             type: 'line',
-            yMin: SUCCESS_VALUE,
-            yMax: SUCCESS_VALUE,
+            yMin: successValue,
+            yMax: successValue,
             borderColor: ANNOTATION_BORDER_COLOR,
             borderWidth: 1,
             borderDash: [3, 3],
           },
           horizontalLine2: {
             type: 'line',
-            yMin: SUCCESS_VALUE - 1,
-            yMax: SUCCESS_VALUE - 1,
+            yMin: successValue - 1,
+            yMax: successValue - 1,
             borderColor: ANNOTATION_BORDER_COLOR,
             borderWidth: 1,
             borderDash: [3, 3],
@@ -44,8 +46,8 @@ export const getChartOptions = () => {
             borderWidth: 0,
             drawTime: 'beforeDatasetsDraw',
             xScaleID: 'x',
-            yMax: SUCCESS_VALUE,
-            yMin: SUCCESS_VALUE - 1,
+            yMax: successValue,
+            yMin: successValue - 1,
             yScaleID: 'y',
           },
         },
@@ -84,8 +86,8 @@ export const getChartOptions = () => {
           const newTicks = [
             ...ctx.ticks,
             {
-              value: SUCCESS_VALUE,
-              label: `${SUCCESS_VALUE} %`,
+              value: successValue,
+              label: `${successValue} %`,
             },
           ]
 

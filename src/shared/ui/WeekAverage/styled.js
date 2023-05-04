@@ -29,3 +29,16 @@ export const SuggestedResult = styled.div`
   line-height: 16px;
   color: rgba(255, 255, 255, 0.5);
 `;
+
+export const ValueWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
+
+export const UpTo = styled.div`
+  color: rgba(94, 255, 90, 1);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 28px;
+  margin-left: 8px;
+`;
