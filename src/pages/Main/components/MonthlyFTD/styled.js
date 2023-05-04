@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+
 import WeekAverage from '../../../../shared/ui/WeekAverage';
 import ChartBlock from "../../../../shared/ui/ChartBlock";
 
@@ -7,7 +8,7 @@ export const Wrapper = styled.div`
 `;
 
 export const StatsBlock = styled(WeekAverage)`
-    margin-top: 48px;
+    margin-top: 84px;
 `;
 
 export const ChartWrapper = styled.div`
@@ -16,7 +17,7 @@ export const ChartWrapper = styled.div`
 `
 
 export const StatsWrapper = styled.div`
-  display: block;
+  margin-top: 36px;
 `
 
 export const MonthChartBlock = styled(ChartBlock)`

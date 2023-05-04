@@ -16,6 +16,7 @@ import { getChartOptions } from './utils/getChartOptions'
 import { getChartData } from './utils/getChartData'
 import addBarPictures from './plugins/addBarPictures'
 import customBackground from './plugins/customBackground'
+import getAddBarPicturesPlugin from "./plugins/addBarPictures";
 
 ChartJS.register(
   CategoryScale,
@@ -30,10 +31,10 @@ ChartJS.register(
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.font.family = 'Inter'
 
-const BarChart = ({ values, labels, successValue }) => {
+const BarChart = ({ values, labels, successValue, successIcon }) => {
   const data = getChartData(values, labels, successValue)
   const options = getChartOptions(successValue)
-  const plugins = [chartDataLabels, addBarPictures, customBackground]
+  const plugins = [chartDataLabels, getAddBarPicturesPlugin(successValue, successIcon), customBackground]
 
   return <Bar options={options} data={data} plugins={plugins} />
 }

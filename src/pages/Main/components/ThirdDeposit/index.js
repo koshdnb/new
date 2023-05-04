@@ -34,6 +34,7 @@ const ThirdDeposit = () => {
           values={[3, 2.8, 1.4, 4.1, 4, 1.1]}
           labels={['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10']}
           successValue={4.5}
+          successIcon={'reward'}
         />
       </ChartWrapper>
     </Wrapper>

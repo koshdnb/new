@@ -110,7 +110,8 @@ export const getChartOptions = (successValue) => {
 
             if (context.tick.value === successValue) {
               return {
-                size: 14,
+                size: 16,
+                weight: 'bold',
               }
             }
           },

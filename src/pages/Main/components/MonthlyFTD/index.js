@@ -31,6 +31,7 @@ const MontlyFTD = () => {
             values={[29500, 41000, 31000]}
             labels={['APR', 'MAY', 'JUN']}
             successValue={36200}
+            successIcon={'star'}
           />
         </ChartWrapper>
       </MonthChartBlock>
