@@ -1,0 +1,251 @@
+<html>
+    <head>
+        <style>
+            body {
+                height: 600px;
+                background: #1a1919;
+            }
+
+            canvas {
+                max-height: 500px;
+                max-width: 900px;
+            }
+        </style>
+
+    </head>
+    <body>
+        <h1>Title</h1>
+        <canvas id="popChart" width="400" height="400"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
+        <script>
+          const successColors = {
+            start: 'rgba(255, 212, 34, 1)',
+            stop: 'rgb(100%, 47%, 0%, 1)'
+          }
+          const negativeColors = {
+            start: 'rgba(74, 133, 255, 1)',
+            stop: 'rgba(148, 77, 206, 0.93)'
+          }
+
+          var rewardIcon = new Image();
+          rewardIcon.src = '/reward-icon.svg';
+
+          var rocketIcon = new Image();
+          rocketIcon.src = '/rocket-icon.svg';
+
+          const getGradient = (ctx, chartArea, start_color, stop_color) => {
+            gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+            gradient.addColorStop(0, stop_color);
+            gradient.addColorStop(1, start_color);
+
+            return gradient;
+          }
+
+          const addPicture = {
+            id: 'addPicture',
+            afterDatasetsDraw(chart, args) {
+              const {ctx} = chart;
+              ctx.save();
+              console.log('ctx', chart.getDatasetMeta(0));
+
+              const dataLength = chart.getDatasetMeta(0).data.length -1;
+
+              for (let i = 0; i <= dataLength; i++) {
+                if (chart.getDatasetMeta(0).data[i].$context.raw >= 4.5) {
+                  ctx.drawImage(rewardIcon,
+                    chart.getDatasetMeta(0).data[i].x - 20, chart.getDatasetMeta(0).data[i].y - 50, 40, 40
+                  )
+                }
+
+                if ( i === dataLength) {
+                  ctx.drawImage(rocketIcon,
+                    chart.getDatasetMeta(0).data[i].x - 20, chart.getDatasetMeta(0).data[i].y - 50, 40, 40
+                  )
+                }
+              }
+
+            }
+          }
+
+          // const verticalBackroundColor = {
+          //   id: 'verticalBackroundColor',
+          //   beforeDatasetsDraw(chart, args) {
+          //     const {ctx, data, chartArea: {top, left, bottom, right, height, width}, scales} = chart;
+          //     console.log('ctx, data, chartArea, scales', ctx, data, scales);
+          //     console.log('datasets', data.datasets);
+          //     ctx.save();
+          //     data.labels.forEach((bar, index) => {
+          //       ctx.fillStyle = 'lightgray';
+          //       console.log('fill', height, scales.x.getPixelForValue(index));
+          //       ctx.fillRect(scales.x.getPixelForValue(index), bottom, 10, height)
+          //     })
+          //     ctx.restore();
+          //   }
+          // }
+
+
+
+          const backgroundColor = {
+            id: 'backgroundColor',
+            beforeDraw: (chart) => {
+              const {ctx} = chart;
+              ctx.save();
+              ctx.globalCompositeOperation = 'destination-over';
+              ctx.fillStyle = 'black';
+              ctx.fillRect(0, 0, chart.width, chart.height);
+              ctx.restore();
+            }
+          };
+          let delayed;
+          var popCanvas = document.getElementById("popChart");
+          var barChart = new Chart(popCanvas, {
+            type: 'bar',
+            data: {
+              labels: ["w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9", "w10"],
+              datasets: [
+                {
+                    label: null,
+                    data: [4.3, 3.8, 5.4, 4.1, 4, 5.1, 4.7, 4.3, 4.2, 4],
+                    backgroundColor: function(context) {
+                      const chart = context.chart;
+                      const {
+                        ctx,
+                        chartArea
+                      } = chart;
+                      if (!chartArea) {
+                        return null;
+                      }
+                      const colors  = context.raw > 4.5 ? successColors : negativeColors;
+                      return getGradient(ctx, chartArea, colors.start, colors.stop);
+                    },
+                    barThickness: 10,
+                    borderRadius: 4,
+                },
+                {
+                  label: null,
+                  data: [1.7, 2.2, .6, 1.9, 2, .9, 1.3, 1.7, 1.8, 2],
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  barThickness: 10,
+                  borderRadius: 4,
+                  grouped: false,
+                },
+              ]
+
+            },
+            options: {
+              plugins: {
+                annotation: {
+                  annotations: {
+                    horizontalLine1: {
+                      type: 'line',
+                      yMin: 4.5,
+                      yMax: 4.5,
+                      borderColor: 'rgba(255, 212, 34, 0.5)',
+                      borderWidth: 1,
+                      borderDash: [3, 3],
+                    },
+                    horizontalLine2: {
+                      type: 'line',
+                      yMin: 3.5,
+                      yMax: 3.5,
+                      borderColor: 'rgba(255, 212, 34, 0.5)',
+                      borderWidth: 1,
+                      borderDash: [3, 3],
+                    },
+                  }
+                },
+                datalabels: {
+                  anchor: 'end',
+                  align: 'right',
+                  formatter: (value, ctx) => ctx.datasetIndex === 0 ? `${value} %`: null,
+                  font: {
+                    weight: 'normal'
+                  },
+                  backgroundColor: 'rgba(35, 35, 85, 0.8)',
+                  padding: 4,
+                  color: '#FFFFFF',
+                },
+                tooltip: {
+                  enabled: false,
+                },
+                legend: {
+                  display: false
+                },
+              },
+              scales: {
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                },
+                y: {
+                  stacked: true,
+                  grid: {
+                    display: true,
+                  },
+                  afterTickToLabelConversion: (ctx) => {
+                    const newTicks = [...ctx.ticks, {
+                      value: 4.5,
+                      label: '4.5 %',
+                    }].sort();
+
+                    ctx.ticks = newTicks;
+                  },
+                  ticks: {
+                    callback: function (value, index, values) {
+                      return `${value} %`;
+                    },
+                    color: function (context) {
+                      if (context.tick.value === 4.5) {
+                        return 'rgba(255, 212, 34, 1)';
+                      }
+                      return 'white';
+                    },
+                    font: function (context) {
+                      if (!context.tick) {
+                        return null;
+                      }
+
+                      if (context.tick.value === 4.5) {
+                        return {
+                          size: 14
+                        }
+                      }
+/*
+
+                      return {
+                        size: 12
+                      }
+*/
+                    }
+                  },
+                  position: "right",
+                },
+              },
+              animation: {
+                onComplete: () => {
+                  delayed = true;
+                },
+                duration: '500',
+                delay: (context) => {
+                  let delay = 0;
+                  if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                    delay = context.dataIndex * 20 + context.datasetIndex * 100;
+                  }
+                  return delay;
+                },
+              }
+            },
+            plugins: [backgroundColor, addPicture, ChartDataLabels],
+          });
+
+
+        </script>
+
+    </body>
+
+</html>
+
+

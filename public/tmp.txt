@@ -1,0 +1,240 @@
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import faker from 'faker';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import BarChart from "./shared/ui/BarChart";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  annotationPlugin,
+);
+ChartJS.defaults.font.size = 12;
+ChartJS.defaults.font.family = 'Inter';
+
+let delayed;
+
+export const options = {
+  plugins: {
+    annotation: {
+      annotations: {
+        horizontalLine1: {
+          type: 'line',
+          yMin: 4.5,
+          yMax: 4.5,
+          borderColor: 'rgba(255, 212, 34, 0.5)',
+          borderWidth: 1,
+          borderDash: [3, 3],
+        },
+        horizontalLine2: {
+          type: 'line',
+          yMin: 3.5,
+          yMax: 3.5,
+          borderColor: 'rgba(255, 212, 34, 0.5)',
+          borderWidth: 1,
+          borderDash: [3, 3],
+        },
+        betweenLines: {
+          type: 'box',
+          backgroundColor: function(context) {
+            const chart = context.chart;
+            const {
+              ctx,
+              chartArea
+            } = chart;
+            if (!chartArea) {
+              return null;
+            }
+            return getGradient(ctx, chartArea, 'rgba(255, 119, 0, 0.3)','rgba(255, 212, 34, 0.1)');
+          },
+          borderWidth: 0,
+          drawTime: 'beforeDatasetsDraw',
+          xScaleID: 'x',
+          yMax: 4.5,
+          yMin: 3.5,
+          yScaleID: 'y'
+        }
+      },
+    },
+    datalabels: {
+      anchor: 'end',
+      align: 'right',
+      formatter: (value, ctx) => ctx.datasetIndex === 0 ? `${value} %`: null,
+      font: {
+        weight: 'normal'
+      },
+      backgroundColor: 'rgba(35, 35, 85, 0.8)',
+      padding: 4,
+      color: '#FFFFFF',
+    },
+    tooltip: {
+      enabled: false,
+    },
+    legend: {
+      display: false
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+    },
+    y: {
+      stacked: true,
+      grid: {
+        display: true,
+      },
+      afterTickToLabelConversion: (ctx) => {
+        const newTicks = [...ctx.ticks, {
+          value: 4.5,
+          label: '4.5 %',
+        }];
+
+        ctx.ticks = newTicks;
+      },
+      ticks: {
+        callback: function (value, index, values) {
+          return `${value} %`;
+        },
+        color: function (context) {
+          if (context.tick.value === 4.5) {
+            return 'rgba(255, 212, 34, 1)';
+          }
+          return 'white';
+        },
+        font: function (context) {
+          if (!context.tick) {
+            return null;
+          }
+
+          if (context.tick.value === 4.5) {
+            return {
+              size: 14
+            }
+          }
+          /*
+
+                                return {
+                                  size: 12
+                                }
+          */
+        }
+      },
+      position: "right",
+    },
+  },
+  animation: {
+    onComplete: () => {
+      console.log('complete');
+      delayed = true;
+    },
+    delay: 200,
+  }
+};
+
+const successColors = {
+  start: 'rgba(255, 212, 34, 1)',
+  stop: 'rgb(100%, 47%, 0%, 1)'
+}
+const negativeColors = {
+  start: 'rgba(74, 133, 255, 1)',
+  stop: 'rgba(148, 77, 206, 0.93)'
+}
+
+var rewardIcon = new Image();
+rewardIcon.src = '/reward-icon.svg';
+
+var rocketIcon = new Image();
+rocketIcon.src = '/rocket-icon.svg';
+
+const addPicture = {
+  id: 'addPicture',
+  afterDatasetsDraw(chart, args) {
+    const {ctx} = chart;
+    ctx.save();
+    console.log('ctx', chart.getDatasetMeta(0));
+
+    const dataLength = chart.getDatasetMeta(0).data.length -1;
+
+    for (let i = 0; i <= dataLength; i++) {
+      if (chart.getDatasetMeta(0).data[i].$context.raw >= 4.5) {
+        ctx.drawImage(rewardIcon,
+          chart.getDatasetMeta(0).data[i].x - 20, chart.getDatasetMeta(0).data[i].y - 50, 40, 40
+        )
+      }
+
+      if ( i === dataLength) {
+        ctx.drawImage(rocketIcon,
+          chart.getDatasetMeta(0).data[i].x - 20, chart.getDatasetMeta(0).data[i].y - 50, 40, 40
+        )
+      }
+    }
+
+  }
+}
+const backgroundColor = {
+  id: 'backgroundColor',
+  beforeDraw: (chart) => {
+    const {ctx} = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  }
+};
+
+const getGradient = (ctx, chartArea, start_color, stop_color) => {
+  let gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+  gradient.addColorStop(0, stop_color);
+  gradient.addColorStop(1, start_color);
+
+  return gradient;
+}
+
+export const data = {
+  labels: ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10"],
+  datasets: [
+    {
+      label: null,
+      data: [4.3, 3.8, 5.4, 4.1, 4, 5.1, 4.7, 4.3, 4.2, 4],
+      backgroundColor: function(context) {
+        const chart = context.chart;
+        const {
+          ctx,
+          chartArea
+        } = chart;
+        if (!chartArea) {
+          return null;
+        }
+        const colors  = context.raw > 4.5 ? successColors : negativeColors;
+        return getGradient(ctx, chartArea, colors.start, colors.stop);
+      },
+      barThickness: 10,
+      borderRadius: 4,
+    },
+    {
+      label: null,
+      data: [1.7, 2.2, .6, 1.9, 2, .9, 1.3, 1.7, 1.8, 2],
+      backgroundColor: 'rgba(255,255,255,0.1)',
+      barThickness: 10,
+      borderRadius: 4,
+      grouped: false,
+    },
+  ]
+};
+const plugins = [ChartDataLabels, addPicture, backgroundColor]
