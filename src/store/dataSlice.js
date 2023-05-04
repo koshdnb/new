@@ -1,36 +1,36 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import {brands} from "../shared/configs/brands";
-import {sources} from "../shared/configs/sources";
+import { brands } from '../shared/configs/brands';
+import { sources } from '../shared/configs/sources';
 
 export const dataSlice = createSlice({
-    name: 'data',
-    initialState: {
-        ...brands.reduce((brandsResult, brand) => {
-            brandsResult[brand] = sources.reduce((sourcesResult, source) => {
-                sourcesResult[source] = {
-                    firstDeposit: [],
-                    thirdDeposit: [],
-                    monthlyFtd: [],
-                };
+  name: 'data',
+  initialState: {
+    ...brands.reduce((brandsResult, { key: brand }) => {
+      brandsResult[brand] = sources.reduce((sourcesResult, { key: source }) => {
+        sourcesResult[source] = {
+          firstDeposit: [],
+          thirdDeposit: [],
+          monthlyFtd: [],
+        };
 
-                return sourcesResult;
-            }, {});
+        return sourcesResult;
+      }, {});
 
-            return brandsResult;
-        }, {}),
+      return brandsResult;
+    }, {}),
+  },
+  reducers: {
+    setData: (state, action) => {
+      state = {
+        ...state,
+        ...action.payload,
+      };
+
+      return state;
     },
-    reducers: {
-        setData: (state, action) => {
-            state = {
-                ...state,
-                ...action.payload
-            };
-            console.log(state);
-            return state;
-        },
-    }
-})
+  },
+});
 
 /*
 {
@@ -145,6 +145,6 @@ export const dataSlice = createSlice({
     }
  */
 
-export const {setData} = dataSlice.actions;
+export const { setData } = dataSlice.actions;
 
 export const selectData = (brand, source) => (state) => state.data[brand][source];

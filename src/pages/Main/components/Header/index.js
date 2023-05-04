@@ -1,40 +1,53 @@
 import React from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {brands} from "../../../../shared/configs/brands";
-import {selectBrand, setBrand} from "../../../../store/headerSlice";
-import {Wrapper} from './styled';
+import { brands } from '../../../../shared/configs/brands';
+import { selectBrand, setBrand } from '../../../../store/headerSlice';
+import Sources from './Sources';
+import Option from './Option';
+import { Dropdown, InnerWrapper, Wrapper } from './styled';
+
+const iconsSmall = {
+  iqOption: '/iq_small.svg',
+  exnova: './exnova_small.svg',
+  capitalBear: './capitalbear_small.svg',
+  sabioTrade: './sabio_small.svg',
+};
+
+const iconsLarge = {
+  iqOption: '/iqlogo.svg',
+  exnova: './exnovalogo.svg',
+  capitalBear: './capitalbear.svg',
+  sabioTrade: './sabiologo.svg',
+};
 
 function Header() {
-    const dispatch = useDispatch();
-    const defaultBrand = useSelector(selectBrand);
+  const dispatch = useDispatch();
+  const defaultBrand = useSelector(selectBrand);
 
-    const onChange = ({value}) => {
-        dispatch(setBrand(value));
-    };
+  const onChange = ({ value }) => {
+    dispatch(setBrand(value));
+  };
 
-    return (
-        <Wrapper>
-            <Dropdown
-                options={brands}
-                onChange={onChange}
-                value={defaultBrand}
-            />
-        </Wrapper>
-    );
+  return (
+    <Wrapper>
+      <InnerWrapper>
+        <div>
+          <Dropdown
+            options={brands.map(({ key, name }) => ({
+              value: key,
+              label: <Option name={name} icon={iconsSmall[key]}/>,
+            }))}
+            onChange={onChange}
+            value={defaultBrand}
+          />
+        </div>
+        <div>
+          <Sources/>
+        </div>
+      </InnerWrapper>
+    </Wrapper>
+  );
 }
 
 export default Header;
-
-/*
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-
-const options = [
-  'one', 'two', 'three'
-];
-const defaultOption = options[0];
-<Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />;
- */

@@ -15,7 +15,6 @@ const FirstDeposit = () => {
     const source = useSelector(selectSource);
     const data = useSelector(selectData(brand, source));
     const {firstDeposit} = data;
-    console.log(data);
 
     return (
     <Wrapper>
