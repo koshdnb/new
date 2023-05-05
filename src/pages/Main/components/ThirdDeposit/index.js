@@ -5,8 +5,16 @@ import BarChart from '../../../../shared/ui/BarChart';
 import WeeklyGoal from '../../../../shared/ui/WeeklyGoal';
 import WeekAverage from '../../../../shared/ui/WeekAverage';
 import { ChartWrapper, Wrapper, AverageWrapper, WeekAverageWrapper  } from './styled';
+import {useSelector} from "react-redux";
+import {selectBrand, selectSource} from "../../../../store/headerSlice";
+import {selectData} from "../../../../store/dataSlice";
 
 const ThirdDeposit = () => {
+  const brand = useSelector(selectBrand);
+  const source = useSelector(selectSource);
+  const data = useSelector(selectData(brand, source));
+  const {thirdDeposit} = data;
+
   return (
     <Wrapper>
       <SectionHeader
@@ -31,7 +39,7 @@ const ThirdDeposit = () => {
           </WeekAverageWrapper>
         </AverageWrapper>
         <BarChart
-          values={[3, 2.8, 1.4, 4.1, 4, 1.1]}
+          values={thirdDeposit}
           labels={['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10']}
           successValue={4.5}
           successIcon={'reward'}

@@ -44,4 +44,9 @@ export const Dropdown = styled(DropdownBase)`
       background-color: #151515;
     }
   }
+  
+  .Dropdown-arrow {
+    top: 16px;
+    right: 12px;
+  }
 `;

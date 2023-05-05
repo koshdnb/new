@@ -9,38 +9,51 @@ import { Wrapper } from './styled';
 import { useDispatch } from 'react-redux';
 import { setData } from '../../store/dataSlice';
 
+const getData = (length, value) => Array(length).fill(0).map((item) => Number(Math.random()*value).toFixed(2))
+const getDataObj = () => ({
+  summary: {
+    firstDeposit: getData(10, 6),
+    thirdDeposit: getData(5, 6),
+    monthlyFtd: [],
+  },
+  brazil: {
+    firstDeposit: getData(10, 6),
+    thirdDeposit: getData(4, 6),
+    monthlyFtd: [],
+  },
+  latam: {
+    firstDeposit: getData(4,6),
+    thirdDeposit: getData(4, 6),
+    monthlyFtd: [],
+  },
+  ame: {
+    firstDeposit: getData(10, 6),
+    thirdDeposit: getData(4, 6),
+    monthlyFtd: [],
+  },
+  asia: {
+    firstDeposit: getData(6,1),
+    thirdDeposit: getData(5, 6),
+    monthlyFtd: [],
+  }})
+
 export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setData({
       iqOption: {
-        summary: {
-          firstDeposit: [4.3, 3.8, 5.4, 4.1, 4, 5.1, 4.7, 4.3, 4.2, 4],
-          thirdDeposit: [],
-          monthlyFtd: [],
-        },
-        brazil: {
-          firstDeposit: [],
-          thirdDeposit: [],
-          monthlyFtd: [],
-        },
-        latam: {
-          firstDeposit: [],
-          thirdDeposit: [],
-          monthlyFtd: [],
-        },
-        ame: {
-          firstDeposit: [],
-          thirdDeposit: [],
-          monthlyFtd: [],
-        },
-        asia: {
-          firstDeposit: [],
-          thirdDeposit: [],
-          monthlyFtd: [],
-        },
+        ...getDataObj()
       },
+      exnova : {
+        ...getDataObj()
+      },
+      capitalBear: {
+        ...getDataObj()
+      },
+      sabioTrade: {
+        ...getDataObj()
+      }
     }));
   }, []);
 
